@@ -2,7 +2,14 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_ollama.llms import OllamaLLM
+
+default_persist_directory = "./chroma_langchain_db"
+
+vector_store = Chroma(
+    collection_name="Editais_UFPA",
+    embedding_function=OllamaEmbeddings(model="all-minilm:33m"),
+    persist_directory=default_persist_directory,  # Where to save data locally, remove if not necessary
+)
 
 def loadDocument(pdf_path):
     """
@@ -30,49 +37,35 @@ def loadDocument(pdf_path):
         return None
 
 
-from langchain.embeddings import OllamaEmbeddings
-from langchain.vectorstores import Chroma
-
-def storageInChroma(documents, embedding_model="all-minilm:33m", persist_directory="/chroma"):
+def storageInChroma(documents, persist_directory=default_persist_directory, vector_db=vector_store):
     """
     Armazena os documentos em um banco de dados vetorial usando ChromaDB com persistência.
     
     Args:
         documents (list): Lista de documentos processados.
-        embedding_model (str): Modelo de embeddings para usar na representação vetorial.
         persist_directory (str): Diretório para persistir os dados do ChromaDB.
+        vector_db (Chroma): O banco de dados vetorial para armazenar os documentos.
     
     Returns:
         Chroma: O banco de dados vetorial com os documentos armazenados.
     """
-    try:
-        # Carregar o modelo de embeddings
-        embeddings = OllamaEmbeddings(model=embedding_model)
+    try:        
+        # Configurar o banco de dados Chroma
+        vector_db.add_documents(documents=documents)
         
-        # Configurar o banco de dados Chroma com persistência
-        vectorstore = Chroma.from_documents(
-            documents=documents,
-            embedding=embeddings,
-            persist_directory=persist_directory
-        )
-        
-        # Salvar os dados no disco
-        vectorstore.persist()
-        
-        print(f"Documentos armazenados com persistência no diretório: {persist_directory}")
-        return vectorstore
+        print(f"Documentos armazenados no diretório: {persist_directory}")
+        return vector_store
     except Exception as e:
         print(f"Erro ao armazenar os documentos no ChromaDB: {e}")
         return None
 
 
-def processAndStoreDocument(persist_directory="chroma_storage", embedding_model="all-minilm:33m"):
+def loadAndStoreDocument(persist_directory=default_persist_directory):
     """
     Solicita o caminho de um documento ao usuário, carrega o conteúdo e o armazena no ChromaDB.
     
     Args:
         persist_directory (str): Diretório para persistir os dados do ChromaDB.
-        embedding_model (str): Modelo de embeddings para usar na representação vetorial.
     
     Returns:
         Chroma: O banco de dados vetorial com os documentos armazenados.
@@ -89,11 +82,10 @@ def processAndStoreDocument(persist_directory="chroma_storage", embedding_model=
             print("Falha ao carregar o documento. Verifique o caminho e tente novamente.")
             return None
         
-        # Armazenar no ChromaDB com persistência
+        # Armazenar no ChromaDB
         print("Armazenando documentos no ChromaDB...")
         vectorstore = storageInChroma(
             documents, 
-            embedding_model=embedding_model, 
             persist_directory=persist_directory
         )
         
@@ -109,11 +101,13 @@ def processAndStoreDocument(persist_directory="chroma_storage", embedding_model=
 
 
 if __name__ == "__main__":
-    # Diretório de persistência para o ChromaDB
-    persist_directory = "chroma"
-    
+
     # Processar e armazenar o documento
-    vectorstore = processAndStoreDocument(persist_directory=persist_directory)
+    #vectorstore = loadAndStoreDocument()
+    print(vector_store.similarity_search("caso eu não tenha familiar com conta bancária, o que eu devo fazer?", k=3))
+    
+    
+
 
 
 # '''loader = PyPDFLoader(r"C:\Users\Christian\OneDrive - Universidade Federal do Pará - UFPA\TRABALHOS\8 Periodo\Engenharia de Software\Chatbot-FAQ-Whatsapp\Editais\Edital_05_2024_COPERPS_PS2025_retificado_v3.pdf")
