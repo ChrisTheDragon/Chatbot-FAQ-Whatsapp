@@ -77,7 +77,7 @@ def storageInChroma(documents, persist_directory=default_persist_directory, vect
         return None
 
 
-def loadAndStoreDocument(persist_directory=default_persist_directory):
+def loadAndStoreDocument(persist_directory=default_persist_directory, path):
     """
     Solicita o caminho de um documento ao usuário, carrega o conteúdo e o armazena no ChromaDB.
     
