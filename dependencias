@@ -1,9 +1,8 @@
 pip install chromadb
 pip install ollama
-pip install transformers
-pip install sentence-transformers
-pip install -qU langchain-openai
 pip install langchain-ollama
 pip install langchain-chroma
-pip install -qU langchain_community pypdf
+pip install -U langchain_community pypdf
 pip install langchain-text-splitters
+
+Funiona no python 3.12.6 (instalar o pyenv se necesario)

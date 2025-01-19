@@ -77,7 +77,7 @@ def storageInChroma(documents, persist_directory=default_persist_directory, vect
         return None
 
 
-def loadAndStoreDocument(persist_directory=default_persist_directory, path):
+def loadAndStoreDocument(path, persist_directory=default_persist_directory):
     """
     Solicita o caminho de um documento ao usuário, carrega o conteúdo e o armazena no ChromaDB.
     
@@ -88,12 +88,9 @@ def loadAndStoreDocument(persist_directory=default_persist_directory, path):
         Chroma: O banco de dados vetorial com os documentos armazenados.
     """
     try:
-        # Solicitar o caminho do documento ao usuário
-        pdf_path = input("Digite o caminho completo do arquivo PDF: ").strip()
-        
         # Carregar o documento
         print("Carregando documento...")
-        documents = loadDocument(pdf_path)
+        documents = loadDocument(path)
         
         if not documents:
             print("Falha ao carregar o documento. Verifique o caminho e tente novamente.")
