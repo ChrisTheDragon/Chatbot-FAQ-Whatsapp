@@ -2,8 +2,12 @@
 env\
 env
 .__pycache__\
+.\__pycache__\
+\__pycache__\
 .env
 .pyenv-version
+.python-version
+.\python-version
 .\Editais
 \Editais
 Editais

@@ -29,7 +29,7 @@ def chatbot():
         retrive_doc = retrive.invoke(question)
         context = ' '.join([doc.page_content for doc in retrive_doc])
 
-        llm = OllamaLLM(model="llama3.2:1b")
+        llm = OllamaLLM(model="llama3.2:3b")
 
         response = llm.invoke(f"""
         Você é um chatbot especializado em responder sobre editais de Processo Seletivo da UFPA. 
