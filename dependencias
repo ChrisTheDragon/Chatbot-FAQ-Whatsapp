@@ -2,7 +2,10 @@ pip install chromadb
 pip install ollama
 pip install langchain-ollama
 pip install langchain-chroma
-pip install -U langchain_community pypdf
+pip install -U langchain_community
+pip install pypdf
 pip install langchain-text-splitters
+
+instalar os modelos "all-minilm:33m" e "llama3.2:1b" no Ollhama
 
 Funiona no python 3.12.6 (instalar o pyenv se necesario)

@@ -43,7 +43,7 @@ def loadDocument(pdf_path):
         doc = loader.load()
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1200,
+            chunk_size=2200,
             chunk_overlap=100,
             add_start_index=True
         )
